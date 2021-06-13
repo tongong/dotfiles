@@ -1,0 +1,4 @@
+# foreground and background colors are partly switched in my build of sxiv
+Sxiv.foreground: #EDEDED
+Sxiv.background: #242424
+Sxiv.font: FiraCode Nerd Font:size=10

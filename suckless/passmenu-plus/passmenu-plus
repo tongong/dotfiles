@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+shopt -s nullglob globstar
+
+typeit=1
+if [[ $1 == "--type" ]]; then
+	typeit=1
+	shift
+fi
+
+prefix=${PASSWORD_STORE_DIR-~/.password-store}
+password_files=( "$prefix"/**/*.gpg )
+password_files=( "${password_files[@]#"$prefix"/}" )
+password_files=( "${password_files[@]%.gpg}" )
+
+password=$(printf '%s\n' "${password_files[@]}" | dmenu "$@")
+
+[[ -n $password ]] || exit
+
+if [[ $typeit -eq 0 ]]; then
+	pass show -c "$password" 2>/dev/null
+else
+	action=$(echo -e "type password\ntype login\ntype login  password" | dmenu "$@")
+
+	case $action in
+		"type password")
+			pass show "$password" | { IFS= read -r pass; printf %s "$pass"; } |
+				xdotool type --clearmodifiers --file -
+			;;
+		"type login")
+			pass show "$password" | awk '/^login:/ {printf $2; exit;}' |
+				xdotool type --clearmodifiers --file -
+			;;
+		"type login  password")
+			passentry=$(pass show "$password")
+			echo "$passentry" | awk '/^login:/ {printf $2; exit;}' |
+				xdotool type --clearmodifiers --file -
+			xdotool key Tab
+			echo "$passentry" | { IFS= read -r pass; printf %s "$pass"; } |
+				xdotool type --clearmodifiers --file -
+			;;
+		*)
+			exit
+			;;
+	esac
+fi

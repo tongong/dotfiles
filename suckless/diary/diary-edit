@@ -1,0 +1,23 @@
+#!/bin/bash
+GPG_KEYID=${DIARY_KEYID:-"83BB96DF"}
+EDITOR=${DIARY_EDITOR:-"vi"}
+
+FILE="$1"
+[[ -n "$FILE" ]] || FILE=$(diary-list)
+if [[ -z "$FILE" ]]; then
+    echo "file not found!"
+    exit 1
+fi
+tmp=$(mktemp /dev/shm/diary.XXXXXXXXXX)
+# save every draft
+# fswatch -0 "$tmp" | xargs -0 -n 1 -I {} gpg --output "$1.tmp" --encrypt --armor --recipient "$GPG_KEYID" --yes --quiet "$tmp"  &
+# FSWATCH_PID=$!
+
+# decrypt, edit, encrypt
+gpg --decrypt --output "$tmp" --yes --quiet "$FILE" && \
+$EDITOR "$tmp"
+gpg --output "$FILE" --encrypt --armor --recipient "$GPG_KEYID" --yes --quiet "$tmp"
+
+# cleanup
+# kill $FSWATCH_PID
+rm "$tmp"

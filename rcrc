@@ -1,0 +1,2 @@
+EXCLUDES="suckless"
+SYMLINK_DIRS="config/aconfmgr"

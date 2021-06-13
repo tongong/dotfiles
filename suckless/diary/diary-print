@@ -1,0 +1,8 @@
+#!/bin/bash
+FILE="$1"
+[[ -n "$FILE" ]] || FILE=$(diary-list)
+if [[ -z "$FILE" ]]; then
+    echo "file not found!"
+    exit 1
+fi
+gpg --decrypt --output "-" --yes --quiet "$FILE"

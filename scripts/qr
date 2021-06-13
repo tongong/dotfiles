@@ -1,0 +1,23 @@
+#!/usr/bin/env sh
+
+# qr - opens an qrcode of input string instantly
+# at the moment sxiv is used, but this can easily substituted
+
+# USAGE EXAMPLE:
+# > qr duckduckgo.com
+
+# test for enough command line arguments
+if [ $# -lt 1 ]; then
+	echo "not enough arguments."
+	exit 1
+fi
+
+# create temporary file
+file=$(mktemp)
+
+# open the qr-code
+qrencode -o "$file" "$1"
+
+sxiv "$file"
+
+rm -f "$file"

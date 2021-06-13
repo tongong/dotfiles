@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+# gives a fuzzy-finding menu to switch to common directories
+
+# this script has to be sourced to make the cd run outside of a subshell
+# put this in your bashrc to source automatically
+# alias fcd=". fcd"
+
+INDEXFILE=~/.config/fcd/index.txt
+
+chosen="$( (echo exit; cat "$INDEXFILE") | fzf --layout=reverse --height=40% \
+    | sed -E "s/^~/\/home\/$(whoami)/")"
+
+[ -d "$chosen" ] && cd "$chosen"
+[ -f "$chosen" ] && nvim "$chosen"
+
+unset INDEXFILE
+unset chosen

@@ -1,0 +1,89 @@
+diff --git a/dwm/dwm.c b/dwm/dwm.c
+--- a/dwm/dwm.c
++++ b/dwm/dwm.c
+@@ -193,6 +193,7 @@ static void grabbuttons(Client *c, int focused);
+ static void grabkeys(void);
+ static void incnmaster(const Arg *arg);
+ static void keypress(XEvent *e);
++static int fakesignal(void);
+ static void killclient(const Arg *arg);
+ static void manage(Window w, XWindowAttributes *wa);
+ static void mappingnotify(XEvent *e);
+@@ -308,6 +309,7 @@ static Display *dpy;
+ static Drw *drw;
+ static Monitor *mons, *selmon;
+ static Window root, wmcheckwin;
++static char globaltitle[256] = "";
+
+ /* configuration, allows nested code to access above variables */
+ #include "config.h"
+@@ -823,6 +825,7 @@ drawbar(Monitor *m)
+ 	drw_setscheme(drw, scheme[SchemeNorm]);
+ 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
+
++	/*
+ 	if ((w = m->ww - wstext - x) > bh) {
+ 		if (m->sel) {
+ 			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
+@@ -834,6 +837,11 @@ drawbar(Monitor *m)
+ 			drw_rect(drw, x, 0, w, bh, 1, 1);
+ 		}
+ 	}
++	*/
++	if ((w = m->ww - wstext - x) > bh) {
++		drw_setscheme(drw, scheme[globaltitle[0] != '\0' ? SchemeSel : SchemeNorm]);
++		drw_text(drw, x, 0, w, bh, lrpad / 2, globaltitle, 0);
++	}
+ 	drw_map(drw, m->barwin, 0, 0, m->ww, bh);
+ }
+
+@@ -1116,6 +1124,36 @@ keypress(XEvent *e)
+ 			keys[i].func(&(keys[i].arg));
+ }
+
++int
++fakesignal(void)
++{
++	char fsignal[256];
++	char indicator[7] = "title:";
++	char str_signum[256];
++	size_t len_fsignal, len_indicator = strlen(indicator);
++
++	// Get root name property
++	if (gettextprop(root, XA_WM_NAME, fsignal, sizeof(fsignal))) {
++		len_fsignal = strlen(fsignal);
++
++		// Check if this is indeed a fake signal
++		if (len_indicator > len_fsignal ? 0 : strncmp(indicator, fsignal, len_indicator) == 0) {
++
++			memcpy(str_signum, &fsignal[len_indicator], len_fsignal - len_indicator);
++			str_signum[len_fsignal - len_indicator] = '\0';
++
++			strcpy(globaltitle,str_signum);
++			drawbars();
++
++			// A fake signal was sent
++			return 1;
++		}
++	}
++
++	// No fake signal was sent, so proceed with update
++	return 0;
++}
++
+ void
+ killclient(const Arg *arg)
+ {
+@@ -1345,8 +1383,10 @@ propertynotify(XEvent *e)
+ 	Window trans;
+ 	XPropertyEvent *ev = &e->xproperty;
+
+-	if ((ev->window == root) && (ev->atom == XA_WM_NAME))
+-		updatestatus();
++	if ((ev->window == root) && (ev->atom == XA_WM_NAME)) {
++		if (!fakesignal())
++			updatestatus();
++	}
+ 	else if (ev->state == PropertyDelete)
+ 		return; /* ignore */
+ 	else if ((c = wintoclient(ev->window))) {

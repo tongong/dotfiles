@@ -1,0 +1,14 @@
+#!/usr/bin/sh
+# mount, unmount and poweroff usb drives through dmenu with udisksctl
+# inspired by dmenu-udevil
+
+DEV_LABEL="/dev/disk/by-label/"
+
+label="$(find $DEV_LABEL* | cut -d'/' -f5 | dmenu -p "usb:")"
+path="$DEV_LABEL$label"
+[[ -z $label ]] && echo "Cancelled." && exit
+
+action=$(echo -e "mount\nunmount\npoweroff" | dmenu -p "$label:")
+[[ -z $action ]] && echo "Cancelled." && exit
+[[ $action = poweroff ]] && action=power-off
+udisksctl "$action" -b "$path" 2>&1 | xargs -0 notify-send

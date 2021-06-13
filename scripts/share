@@ -1,0 +1,84 @@
+#!/usr/bin/env sh
+
+# upload files to online storage and get a link to share with your friends
+
+# services
+# -> transfer.sh     10000 MB
+# -  file.io           100 MB
+# -  0x0.st            530 MB
+# -  oshi.at          5000 MB  (some server downtimes)
+# -  filepush.co        32 MB
+# -  keep.sh           500 MB
+# -  transfersh.com  10000 MB
+
+function cryptcmd {
+    if [ -n "$pss" ]; then
+        gpg --symmetric --cipher-algo AES256 --passphrase "$pss" --batch -o- | curlercmdoshi
+    else
+        curlercmdoshi
+    fi
+}
+
+
+function getpasswd {
+    pswd=$(echo -e "generate password\nenter password\nno password" | fzf --layout=reverse --height=10%)
+    case "$pswd" in
+        "generate password")
+            pss=$(head /dev/urandom | tr -dc a-z0-9 | head -c 30)
+            echo "Password is: $pss"
+            file_name="$file_name.gpg"
+            ;;
+        "enter password")
+            echo -n "Enter password: "
+            read pss
+            file_name="$file_name.gpg"
+            ;;
+        "no password")
+            ;;
+        *)
+            exit 1;
+            ;;
+    esac
+}
+
+
+function curlercmdoshi {
+    links=$(curl -v --upload-file "-" "http://oshi.at/$file_name/14400")
+    echo "$links" | awk ' /CDN/ {print $1}'
+    echo "$links" | awk ' /Admin/ {print "admin: " $1}'
+    [ -n "$pss" ] && pss="  password: $pss"
+    (echo "$links" | awk ' /Admin/ {printf "%s", $1}'; echo "  $file_name$pss") >> ~/.share-history
+}
+
+function curlercmdtransfer {
+    links=$(curl -D - --upload-file - "http://transfer.sh/$file_name")
+    echo "$links" | tail -n1
+    echo "$links" | awk ' /X-Url-Delete/ {print "delete: " $2}'
+    [ -n "$pss" ] && pss="  password: $pss"
+    (echo "$links" | awk ' /X-Url-Delete/ {printf "%s", $2}'; echo "  $file_name$pss") \
+        | sed -e 's///g' >> ~/.share-history
+}
+
+
+# access admin/delete panel for older files
+if [ "$1" = history ]; then
+    "$EDITOR" ~/.share-history
+else
+    if [ $# -eq 0 ]; then
+        echo -e "No arguments specified.\nUsage:\n  share <file|directory>\n  ... | share <file_name>">&2
+        exit 1
+    fi
+    if tty -s; then
+        file="$1"
+        file_name=$(basename "$file")
+        if [ ! -e "$file" ]; then
+            echo "$file: No such file or directory">&2
+            exit 1
+        fi
+        getpasswd
+        cat "$file" | cryptcmd
+    else file_name=$1
+        getpasswd
+        cryptcmd
+    fi
+fi

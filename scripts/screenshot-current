@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+mkdir ~/screenshots
+
+imagepath=~/screenshots/$(date +%s).png
+maim -i $(xdotool getactivewindow) $imagepath -u
+echo -n $imagepath | xsel -ib

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+mkdir ~/screenshots
+
+imagepath=~/screenshots/$(date +%s).png
+maim -s $imagepath -u
+echo -n $imagepath | xsel -ib

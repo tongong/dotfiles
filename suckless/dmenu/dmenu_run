@@ -1,0 +1,13 @@
+#!/bin/sh
+# This modified version of dmenu_run allows to run all programs listet in ~/.config/dmenu/terminal in terminal mode
+
+terminal="st -e"
+
+command=$(dmenu_path | dmenu "$@")
+
+if grep -Fxq "$command" ~/.config/dmenu/terminal
+then
+	echo $terminal $command | ${SHELL:-"/bin/sh"} &
+else
+	echo $command | ${SHELL:-"/bin/sh"} &
+fi

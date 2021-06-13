@@ -1,0 +1,13 @@
+#!/bin/bash
+GPG_KEYID=${DIARY_KEYID:-"83BB96DF"}
+ENTRIES_DIR=${DIARY_DIRECTORY:-"/Users/synox/diary"}
+EDITOR=${DIARY_EDITOR:-"vi"}
+
+tmp=$(mktemp /dev/shm/diary.XXXXXXXXXX)
+$EDITOR "$tmp"
+
+dest="$ENTRIES_DIR/$(date  +%Y-%m-%d-%H%M%S).txt.gpg"
+gpg --output "$dest" --encrypt --armor --recipient "$GPG_KEYID" --yes --quiet "$tmp"
+ls -la "$dest"
+
+rm "$tmp"

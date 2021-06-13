@@ -1,0 +1,22 @@
+#!/usr/bin/sh
+
+open=$(echo -e "dual\nmono\nrestore\narandr" | dmenu -p "screen:")
+
+case $open in
+    # the xrandr commands are not up to date
+    dual)
+        xrandr --output VGA-1 --off --output HDMI-1 --mode 1920x1080 --pos 1368x0 --rotate normal --output LVDS-1 --mode 1366x768 --pos 0x0 --rotate normal
+        ;;
+    mono)
+        xrandr --output VGA-1 --off --output HDMI-1 --off --output LVDS-1 --mode 1366x768 --pos 0x0 --rotate normal
+        ;;
+    restore)
+        nitrogen --restore
+        # not really related to the screen but whatever
+        setxkbmap de -option caps:escape
+        ;;
+    arandr)
+        arandr
+        exit
+        ;;
+esac

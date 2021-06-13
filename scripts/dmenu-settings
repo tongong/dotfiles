@@ -1,0 +1,32 @@
+#!/usr/bin/sh
+# this opens a promt with device settings managed through dmenu
+# let's build a dmenu-os lol
+
+# original sources or inspiration
+# - https://gist.github.com/Nervengift/844a597104631c36513c
+# - https://github.com/ClydeDroid/rofi-bluetooth
+# - https://github.com/firecat53/networkmanager-dmenu
+# - https://github.com/c-14/dmenu-scripts/blob/master/dmenu-udevil.sh
+
+open=$(echo -e "bluetooth\nnetwork\naudio\nusb\nscreen" | dmenu -p "settings:")
+
+case $open in
+    bluetooth)
+        dmenu-bluetooth
+        ;;
+    network)
+        dmenu-network
+        ;;
+    audio)
+        dmenu-audio
+        ;;
+    usb)
+        dmenu-usb
+        ;;
+    screen)
+        dmenu-screen
+        ;;
+   *)
+        exit
+        ;;
+esac

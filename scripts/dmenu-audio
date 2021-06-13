@@ -1,0 +1,27 @@
+#!/usr/bin/sh
+# choose pulseaudio sink via dmenu
+# changes default sink and moves all streams to that sink
+
+# get all sink ids and descriptions
+sources=$(pacmd list-sinks)
+sinknames=$(echo "$sources" | grep  "device.description" | awk -F '"' '{print $2}')
+sinkids=$(echo "$sources" | grep  "name: "| awk '{print substr($2,2,length($2)-2)}')
+
+# choose one sink by description
+namechosen=$(echo "$sinknames" | dmenu -l 10 -p "audio:")
+[[ -z $namechosen ]] && echo "Cancelled." && exit
+
+# get the corresponding id for the chosen sink
+numberchosen=$(echo "$sinknames" | awk -v var="$namechosen" '{if ($0 == var) {print FNR}}')
+idchosen=$(echo "$sinkids" | awk -v var="$numberchosen" '{if (FNR == var) {print $0}}')
+
+# set as default
+pactl set-default-sink "$idchosen"
+
+# move all streams to the new sink
+for input in $(pactl list short sink-inputs | awk '{print $1}');do
+	pactl move-sink-input "$input" "$idchosen"
+done
+
+# update statusbar
+sigdwmblocks 5

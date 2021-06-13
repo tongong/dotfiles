@@ -1,0 +1,38 @@
+diff --git a/dwm/config.def.h b/dwm/config.def.h
+--- a/dwm/config.def.h
++++ b/dwm/config.def.h
+@@ -21,6 +21,7 @@ static const char *colors[][3]      = {
+ 	/*               fg         bg         border   */
+ 	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
+ 	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
++	[SchemeBar]  = { col_cyan, col_cyan,  col_cyan  }, // Dirty workaround lol
+ };
+
+ /* tagging */
+diff --git a/dwm/dwm.c b/dwm/dwm.c
+--- a/dwm/dwm.c
++++ b/dwm/dwm.c
+@@ -59,7 +59,7 @@
+
+ /* enums */
+ enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
+-enum { SchemeNorm, SchemeSel }; /* color schemes */
++enum { SchemeNorm, SchemeSel, SchemeBar }; /* color schemes */
+ enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
+        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
+        NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
+@@ -746,10 +746,10 @@ drawbar(Monitor *m)
+ 		w = TEXTW(tags[i]);
+ 		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
+ 		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
+-		if (occ & 1 << i)
+-			drw_rect(drw, x + boxs, boxs, boxw, boxw,
+-				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
+-				urg & 1 << i);
++		if (occ & 1 << i) {
++			drw_setscheme(drw, scheme[SchemeBar]);
++			drw_rect(drw, x, 0, w, 2, 1, 0);
++		}
+ 		x += w;
+ 	}
+ 	w = blw = TEXTW(m->ltsymbol);

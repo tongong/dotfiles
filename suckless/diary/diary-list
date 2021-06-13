@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Lists diary entry name and first line with fzf
+# the filepath of the chosen entry is printed to stdout
+
+ENTRIES_DIR=${DIARY_DIRECTORY:-"/Users/synox/diary"}
+GPG_CMD=${DIARY_GPG:-"gpg2"}
+
+(
+# for file in $ENTRIES_DIR/*.txt*; do
+ls $ENTRIES_DIR/*.txt* | tac | while read file; do
+	echo  "$(basename "$file" .txt.gpg) - $($GPG_CMD --decrypt --output "-" --yes --quiet "$file" | head -n 1)"
+done
+) | fzf | awk -F' ' -v dir=$ENTRIES_DIR '{print (dir "/" $1 ".txt.gpg") }'
