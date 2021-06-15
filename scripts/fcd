@@ -11,7 +11,7 @@ chosen="$( (echo exit; cat "$INDEXFILE") | fzf --layout=reverse --height=40% \
     | sed -E "s/^~/\/home\/$(whoami)/")"
 
 [ -d "$chosen" ] && cd "$chosen"
-[ -f "$chosen" ] && nvim "$chosen"
+[ -f "$chosen" ] && cd "$(dirname $chosen)" && nvim "$chosen"
 
 unset INDEXFILE
 unset chosen
