@@ -9,6 +9,9 @@ set shiftwidth=4
 set expandtab
 set smartindent
 
+set foldmethod=indent
+set foldlevelstart=20
+
 " interface
 set number
 set relativenumber
@@ -125,6 +128,7 @@ nnoremap <leader>w :w<CR>
 nnoremap <leader>r :Goyo<CR>
 nnoremap <leader>s :call ToggleSpell()<CR>
 nnoremap <leader>a ggVG
+nnoremap <leader>R :source $MYVIMRC<CR>
 " from LukeSmith's dotfiles
 " Compile document, be it groff/LaTeX/markdown/etc.
 nnoremap <leader>c :w! \| !compiler "<c-r>%"<CR>
@@ -137,6 +141,8 @@ nnoremap <leader>z :bo 10 Repl<CR>
 nnoremap Q gqq
 " the ^ key is not reachable on qwertz keyboards
 noremap 0 ^
+nmap <return> za
+nmap <leader><return> zR
 
 nmap <Leader>ii <Plug>(GitGutterPreviewHunk)
 nmap <Leader>is <Plug>(GitGutterStageHunk)
@@ -147,10 +153,27 @@ nmap <Leader>io <Plug>(GitGutterNextHunk)
 tnoremap <Esc> <Esc><C-\><C-n>
 
 " I always get these wrong
-command W w
-command Wq wq
-command WQ wq
-command Q q
+command! W w
+command! Wq wq
+command! WQ wq
+command! Q q
+
+noremap zj :call NextClosedFold('j')<cr>
+noremap zk :call NextClosedFold('k')<cr>
+
+function! NextClosedFold(dir)
+    let cmd = 'norm!z' . a:dir
+    let view = winsaveview()
+    let [l0, l, open] = [0, view.lnum, 1]
+    while l != l0 && open
+        exe cmd
+        let [l0, l] = [l, line('.')]
+        let open = foldclosed(l) < 0
+    endwhile
+    if open
+        call winrestview(view)
+    endif
+endfunction
 
 
 "###  AUTOCOMMANDS  ##########################################################
@@ -171,4 +194,12 @@ augroup SOME_NAME
     autocmd BufEnter * call InitToggleSpell()
     " do not keep history for pass
     autocmd BufEnter /dev/shm/* setl undofile&
+
+    " remember folding
+    autocmd BufWinLeave * mkview
+    autocmd BufWinEnter * silent! loadview
+    " Don't screw up folds when inserting text that might affect them, until
+    " leaving insert mode. Foldmethod is local to the window.
+    autocmd InsertEnter * let w:last_fdm=&foldmethod | setlocal foldmethod=manual
+    autocmd InsertLeave * let &l:foldmethod=w:last_fdm
 augroup END
