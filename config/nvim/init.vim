@@ -183,6 +183,11 @@ fun! TrimWhitespace()
     call winrestview(l:save)
 endfun
 
+
+" remember folding
+set viewoptions=cursor,folds,slash,unix
+source $HOME/.config/nvim/restore-view.vim
+
 augroup SOME_NAME
     autocmd!
     autocmd BufWritePre * call TrimWhitespace()
@@ -195,9 +200,6 @@ augroup SOME_NAME
     " do not keep history for pass
     autocmd BufEnter /dev/shm/* setl undofile&
 
-    " remember folding
-    autocmd BufWinLeave * mkview
-    autocmd BufWinEnter * silent! loadview
     " Don't screw up folds when inserting text that might affect them, until
     " leaving insert mode. Foldmethod is local to the window.
     autocmd InsertEnter * let w:last_fdm=&foldmethod | setlocal foldmethod=manual
