@@ -22,6 +22,8 @@ export VISUAL=nvim
 export BROWSER=firefox
 export TERMINAL=st
 
+export MANWIDTH=80
+
 # load private environment variables (not tracked in git)
 . "$HOME/.profile-private"
 
