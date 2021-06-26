@@ -2,7 +2,7 @@
 "      Language: vim script
 "    Maintainer: Yichao Zhou (broken.zhou AT gmail dot com)
 "       Version: 1.3
-"   Description: 
+"   Description:
 "       This is a simple script to autosave cursor position and fold
 "       information using vim's mkview.  Although you can easily do this job by
 "       just add serveral line to {.,_}vimrc, write a script plugin can make it
@@ -14,7 +14,7 @@
 " Suggested Setting:
 "       Please put them in you vimrc file.
 "           set viewoptions=cursor,folds,slash,unix
-"       
+"
 "       Set it in a plugin file looks dirty to me.  So you'd better do it your
 "       self.  This only keywords not in viewoptions is "options". I believe it
 "       does not belong to a view.  If you think you need it, feel free to
@@ -58,5 +58,8 @@ augroup AutoView
     autocmd!
     " Autosave & Load Views.
     autocmd BufWritePre,BufWinLeave ?* if MakeViewCheck() | silent! mkview | endif
-    autocmd BufWinEnter ?* if MakeViewCheck() | silent! loadview | endif
+    " the loadview could change foldmethod. in this case foldmethod is
+    " correctly reset using filetype rules
+    " for the lightline part see https://github.com/itchyny/lightline.vim/issues/484
+    autocmd BufWinEnter ?* if MakeViewCheck() | silent! loadview | let &l:filetype = &l:filetype | call lightline#update() | endif
 augroup END

@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+while :
+do
+    note="$(echo -n "" | dmenu -p "new note:")"
+
+    [[ -z $note ]] && exit
+
+    echo "- $note" >> $NOTES_DIR/refile.md
+done

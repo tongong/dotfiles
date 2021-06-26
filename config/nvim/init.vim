@@ -19,6 +19,7 @@ set colorcolumn=80
 set signcolumn=yes
 set noshowmode " not needed because of lightline statusline
 set fillchars=eob:\ ,
+set conceallevel=2
 
 " use persistent history.
 " -> these are reset for /dev/shm to keep pass secure (see #autocommands)
@@ -56,7 +57,6 @@ Plug 'junegunn/goyo.vim'
 Plug 'mbbill/undotree'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
-Plug 'vimwiki/vimwiki'
 
 call plug#end()
 
@@ -68,10 +68,6 @@ colorscheme dim
 
 " statusbar
 let g:lightline = { 'colorscheme': 'dim', }
-
-" vimwiki
-let g:vimwiki_list = [{'path': $VIMWIKI_DIR,
-            \ 'syntax': 'markdown', 'ext': '.md'}]
 
 " spell check toggle
 let g:myLangList = ["nospell", "de_de", "en_us"]
@@ -106,6 +102,9 @@ let g:repl_config = {
             \     "formatter": function("zepl#contrib#python#formatter")
             \   }
             \ }
+
+let g:notes_dir = $NOTES_DIR
+source $HOME/.config/nvim/notes.vim
 
 
 "###  REMAPS  ################################################################
@@ -152,6 +151,9 @@ nmap <Leader>io <Plug>(GitGutterNextHunk)
 " exit terminal mode
 tnoremap <Esc> <Esc><C-\><C-n>
 
+" why would you use gf instead of gF?
+nmap gf gF
+
 " I always get these wrong
 command! W w
 command! Wq wq
@@ -188,20 +190,21 @@ endfun
 set viewoptions=cursor,folds,slash,unix
 source $HOME/.config/nvim/restore-view.vim
 
-augroup SOME_NAME
+augroup main
     autocmd!
-    autocmd BufWritePre * call TrimWhitespace()
+    autocmd BufWritePre         *           call TrimWhitespace()
+    autocmd BufEnter            *           call InitToggleSpell()
     " clear colon commands
-    autocmd CmdlineLeave : echo ''
-    " fix weird markdown bug
-    autocmd BufEnter *.md setl syntax=markdown
-    autocmd BufEnter *.remark setl syntax=markdown
-    autocmd BufEnter * call InitToggleSpell()
+    autocmd CmdlineLeave        :           echo ''
+
+    " filetypes
+    autocmd BufRead,BufNewFile  *.md        setlocal filetype=markdown
+    autocmd BufEnter            *.remark    setlocal syntax=markdown
     " do not keep history for pass
-    autocmd BufEnter /dev/shm/* setl undofile&
+    autocmd BufEnter            /dev/shm/*  setlocal undofile&
 
     " Don't screw up folds when inserting text that might affect them, until
     " leaving insert mode. Foldmethod is local to the window.
-    autocmd InsertEnter * let w:last_fdm=&foldmethod | setlocal foldmethod=manual
-    autocmd InsertLeave * let &l:foldmethod=w:last_fdm
+    autocmd InsertEnter         *           let w:last_fdm=&foldmethod | setlocal foldmethod=manual
+    autocmd InsertLeave         *           let &l:foldmethod=w:last_fdm
 augroup END

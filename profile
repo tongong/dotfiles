@@ -27,13 +27,16 @@ export MANWIDTH=80
 # load private environment variables (not tracked in git)
 . "$HOME/.profile-private"
 
+# notes
+# export NOTES_DIR=[private]
+
 # set pass directory
 # export PASSWORD_STORE_DIR=[private]
 
 # diary settings
 # export DIARY_KEYID=[private]
-export DIARY_EDITOR=nvim
 # export DIARY_DIRECTORY=[private]
+export DIARY_EDITOR=nvim
 export DIARY_READER=less
 
 # autostart X at login

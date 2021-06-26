@@ -99,6 +99,8 @@ static const char *passmenucmd[]  = { "passmenu-plus", "--type", "-l", "10", NUL
 static const char *settingscmd[]  = { "dmenu-settings", NULL };
 static const char *notificationcmd[]  = { "st", "-e", "less", "/tmp/notification-list", NULL };
 static const char *pausemusiccmd[]  = { "playerctl", "play-pause", NULL };
+static const char *notescmd[]  = { "st", "-e", "notes", NULL };
+static const char *newnotecmd[]  = { "dnote", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -121,6 +123,8 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_d,      spawn,          {.v = passmenucmd } },
 	{ MODKEY,                       XK_s,      spawn,          {.v = settingscmd } },
 	{ MODKEY,                       XK_m,      spawn,          {.v = pausemusiccmd } },
+	{ MODKEY,                       XK_g,      spawn,          {.v = notescmd } },
+	{ MODKEY|ShiftMask,             XK_g,      spawn,          {.v = newnotecmd } },
 	// run keepass global auto type (configured through keepass)
     //MODKEY|ShiftMask,             XK_t
 	// Rotate focus through windows

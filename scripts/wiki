@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-# vimwiki alias
-nvim -c :VimwikiIndex
