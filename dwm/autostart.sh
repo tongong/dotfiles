@@ -26,6 +26,7 @@ else
     # autostart programs
     clipmenud &
     # syncthing -no-browser &
+    timetracker | timetracker-save &
 
     # set keyboard layout (required for xdotool to work properly)
     # xdotool still struggles with "`" character...
