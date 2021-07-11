@@ -20,7 +20,7 @@ password=$(printf '%s\n' "${password_files[@]}" | dmenu "$@")
 if [[ $typeit -eq 0 ]]; then
 	pass show -c "$password" 2>/dev/null
 else
-	action=$(echo -e "type password\ntype login\ntype login  password" | dmenu "$@")
+	action=$(echo -e "type password\ntype login\ntype login  password\nprint info" | dmenu "$@")
 
 	case $action in
 		"type password")
@@ -38,6 +38,9 @@ else
 			xdotool key Tab
 			echo "$passentry" | { IFS= read -r pass; printf %s "$pass"; } |
 				xdotool type --clearmodifiers --file -
+			;;
+		"print info")
+            st -e sh -c "pass show "$password" && read"
 			;;
 		*)
 			exit
