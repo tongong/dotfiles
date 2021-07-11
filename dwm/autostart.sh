@@ -10,6 +10,8 @@ else
     # window manager settings
     picom &
     nitrogen --restore &
+    # run slock on standby and suspend
+    xss-lock -l ~/.dwm/transfer-sleep-slock.sh &
 
     # dwm statusbar
     statnot ~/.dwm/statnot/statnot-config.py &
