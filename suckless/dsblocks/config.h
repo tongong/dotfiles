@@ -1,10 +1,11 @@
+#include "blocks/battery.h"
+#include "blocks/calendar.h"
+#include "blocks/cpu.h"
+#include "blocks/mem.h"
 #include "blocks/pkgs.h"
 #include "blocks/temp.h"
-#include "blocks/mem.h"
-#include "blocks/cpu.h"
-#include "blocks/volume.h"
-#include "blocks/calendar.h"
 #include "blocks/time.h"
+#include "blocks/volume.h"
 
 /* DELIMITERENDCHAR must be less than 32.
  * At max, DELIMITERENDCHAR - 1 number of clickable blocks are allowed.
@@ -48,6 +49,7 @@ static Block blocks[] = {
         { memu,                 memc,                   2,              4},
         { cpuu,                 cpuc,                   2,              3},
         { volumeu,              volumec,                600,            5},
+        { batteryu,             batteryc,               2,              8},
         { calendaru,            calendarc,              600,            2},
         { timeu,                timec,                  1,              1},
 
