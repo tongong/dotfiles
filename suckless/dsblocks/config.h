@@ -43,7 +43,7 @@ static const char delimiter[] = { ' ', '|', ' ', DELIMITERENDCHAR };
 
 static Block blocks[] = {
 /*      funcu                   funcc                   interval        signal */
-        { pkgsu,                pkgsc,                  600,            9},
+/*      { pkgsu,                pkgsc,                  600,            9}, */
         { tempu,                tempc,                  2,              6},
         { memu,                 memc,                   2,              4},
         { cpuu,                 cpuc,                   2,              3},

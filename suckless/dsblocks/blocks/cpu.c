@@ -9,7 +9,7 @@
 #define STATFILE            "/proc/uptime"
 #define MAX_CHARS_PER_LINE  40
 /* IMPORTANT: idle is the sum of the cores, but uptime real time */
-#define CORE_NUM            4
+#define CORE_NUM            8
 
 size_t cpuu(char *str, int sigval)
 {
