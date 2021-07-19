@@ -8,6 +8,9 @@ now extremely hard to pull upstream changes. I will probably switch to
 something like `git subtree` in the future.
 
 
+## backlight-control
+- from https://github.com/Hendrikto/backlight_control
+
 ## clipmenu & clipnotify
 - not modified by me, but it's there nevertheless lol
 
