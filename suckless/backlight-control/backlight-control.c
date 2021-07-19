@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /**
  * A program to control the backlight brightness.
  *
  * @author: Hendrik Werner
+ * modified by tongong
  */
 
 #define MIN_BRIGHTNESS 1
@@ -19,7 +21,8 @@ void print_usage(char *name) {
 		"Examples:\n"
 		"\t%1$s +10\n"
 		"\t%1$s -10\n"
-		"\t%1$s 50\n",
+		"\t%1$s 50\n"
+		"\t%1$s get\n",
 		name
 	);
 }
@@ -33,11 +36,27 @@ FILE *open_file(char *name) {
 	return file;
 }
 
+unsigned int round_closest(unsigned int dividend, unsigned int divisor)
+{
+    return (dividend + (divisor / 2)) / divisor;
+}
+
 int main(int argc, char **argv) {
 	if (argc != 2) {
 		print_usage(argv[0]);
 		return EXIT_FAILURE;
 	}
+
+    if (!strcmp(argv[1], "get")) {
+        int brightness_value;
+        FILE *brightness = open_file(BRIGHTNESS_FILE);
+        fscanf(brightness, "%d", &brightness_value);
+        fclose(brightness);
+
+        printf("%d\n", round_closest(brightness_value * 100, MAX_BRIGHTNESS));
+        return EXIT_SUCCESS;
+    }
+
 	int value = strtol(argv[1], NULL, 10);
 	FILE *brightness = open_file(BRIGHTNESS_FILE);
 	int brightness_value = MIN_BRIGHTNESS;

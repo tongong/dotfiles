@@ -10,6 +10,8 @@ something like `git subtree` in the future.
 
 ## backlight-control
 - from https://github.com/Hendrikto/backlight_control
+- renamed from `backlight_control` to `backlight-control`
+- added `backlight-control get` command
 
 ## clipmenu & clipnotify
 - not modified by me, but it's there nevertheless lol
