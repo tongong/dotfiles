@@ -12,6 +12,7 @@ something like `git subtree` in the future.
 - from https://github.com/Hendrikto/backlight_control
 - renamed from `backlight_control` to `backlight-control`
 - added `backlight-control get` command
+- added option to update my statusbar after changes
 
 ## clipmenu & clipnotify
 - not modified by me, but it's there nevertheless lol
