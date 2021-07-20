@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 /**
  * A program to control the backlight brightness.
@@ -10,6 +11,9 @@
  */
 
 #define MIN_BRIGHTNESS 1
+
+/* is run after brightness change to update statusbar etc. */
+char *notify_cmd[]={"sigdsblocks", "9", NULL};
 
 #define MAX(a, b) ((a > b) ? a : b)
 #define MIN(a, b) ((a < b) ? a : b)
@@ -73,5 +77,7 @@ int main(int argc, char **argv) {
 	brightness_value = MAX(brightness_value, MIN_BRIGHTNESS);
 	fprintf(brightness, "%d", brightness_value);
 	fclose(brightness);
+
+    execvp(notify_cmd[0],notify_cmd);
 	return EXIT_SUCCESS;
 }

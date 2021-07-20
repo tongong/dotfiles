@@ -1,4 +1,5 @@
 #include "blocks/battery.h"
+#include "blocks/brightness.h"
 #include "blocks/calendar.h"
 #include "blocks/cpu.h"
 #include "blocks/mem.h"
@@ -48,6 +49,7 @@ static Block blocks[] = {
         { tempu,                tempc,                  2,              6},
         { memu,                 memc,                   2,              4},
         { cpuu,                 cpuc,                   2,              3},
+        { brightnessu,          brightnessc,            600,            9},
         { volumeu,              volumec,                600,            5},
         { batteryu,             batteryc,               2,              8},
         { calendaru,            calendarc,              600,            2},
