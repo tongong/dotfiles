@@ -5,7 +5,7 @@
 alias ls='exa -l'
 alias grep='grep --color=auto'
 alias diff='diff --color=auto'
-man() {
+function man() {
     LESS_TERMCAP_md=$'\e[01;31m' \
     LESS_TERMCAP_me=$'\e[0m' \
     LESS_TERMCAP_se=$'\e[0m' \
@@ -35,7 +35,7 @@ alias .....='cd ../../../..'
 alias v='nvim'
 
 # cheat.sh shortcut
-function cheat(){ curl cheat.sh/"$@"; }
+function cheat(){ curl cheat.sh/"$1"; }
 
 # neovim vim tutor
 alias vimtutor='nvim -c :Tutor'
@@ -47,7 +47,25 @@ alias gg='nvim -c ":G" -c ":wincmd j" -c ":q"'
 
 # print the source of executables. Useful for shell scripts
 excat() {
-    cat "$(which $1)"
+    cat "$(which "$1")"
+}
+
+alias drag='dragon-drag-and-drop --and-exit'
+function drop() {
+    uri="$(dragon-drag-and-drop --target --and-exit)"
+    if [[ "$uri" == "file://"* ]];
+    then
+        echo sees
+        # filenames are not allowed to be longer than 999999
+        # i don't know how to make a substring expansion till the end
+        uri=${uri:7:999999}
+        echo "$uri"
+        sel="$(echo -e "copy\nmove" | dmenu -l 10)"
+        [[ "$sel" == copy ]] && cp "$uri" .
+        [[ "$sel" == move ]] && mv "$uri" .
+    else
+        echo "$uri"
+    fi
 }
 
 # enable fcd to change working directory
