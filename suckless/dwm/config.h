@@ -53,9 +53,8 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimptudeldu",     NULL,       NULL,       0,            1,           -1 }, // array cannot be empty
-	//{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	/* class                  instance   title   tags mask   isfloating   monitor */
+    { "Dragon-drag-and-drop", NULL,      NULL,   -1,         1,           -1 },
 };
 
 /* layouts */
@@ -104,7 +103,7 @@ static const char *newnotecmd[]  = { "dnote", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
-	// Run commands
+	// commands
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = samedirtermcmd } },
 	{ MODKEY,                       XK_r,      spawn,          {.v = dmenucmd } },
@@ -125,22 +124,18 @@ static Key keys[] = {
 	{ MODKEY,                       XK_m,      spawn,          {.v = pausemusiccmd } },
 	{ MODKEY,                       XK_g,      spawn,          {.v = notescmd } },
 	{ MODKEY|ShiftMask,             XK_g,      spawn,          {.v = newnotecmd } },
-	// run keepass global auto type (configured through keepass)
-    //MODKEY|ShiftMask,             XK_t
 	// Rotate focus through windows
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	// Rotate windows
 	{ MODKEY|ShiftMask,             XK_j,      rotatestack,    {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_k,      rotatestack,    {.i = -1 } },
-	// Change number of master windows
-	//{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	//{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	// Change width of master window
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	// Makes current window master (or first other if current window is master)
     //{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
+	{ MODKEY,                       XK_space,  zoom,           {0} },
 	// Go to last active tag at the screen
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	// Set layouts
@@ -148,9 +143,9 @@ static Key keys[] = {
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	// { MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	// Toggle last two layouts
-	{ MODKEY,                       XK_space,  setlayout,      {0} },
+	// { MODKEY,                       XK_space,  setlayout,      {0} },
 	// Toggle floating/fullscreen of individual window
-	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
+	// { MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY|ShiftMask,             XK_f,      togglefullscr,  {0} },
 	// show all windows of all tags
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
