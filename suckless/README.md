@@ -45,6 +45,7 @@ something like `git subtree` in the future.
     - https://dwm.suckless.org/patches/statusallmons/
     - https://dwm.suckless.org/patches/vanitygaps/
     - https://dwm.suckless.org/patches/warp/
+    - http://dwm.suckless.org/patches/zoomswap/
     - dwm-dwmblocks patch (without systray) see
       https://github.com/ashish-yadav11/dwmblocks/blob/master/patches/dwm-dwmblocks-6.2.diff
       (I modified this version to work with `dsblocks`, so it's more like
