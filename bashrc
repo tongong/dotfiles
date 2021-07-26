@@ -55,11 +55,9 @@ function drop() {
     uri="$(dragon-drag-and-drop --target --and-exit)"
     if [[ "$uri" == "file://"* ]];
     then
-        echo sees
         # filenames are not allowed to be longer than 999999
         # i don't know how to make a substring expansion till the end
         uri=${uri:7:999999}
-        echo "$uri"
         sel="$(echo -e "copy\nmove" | dmenu -l 10)"
         [[ "$sel" == copy ]] && cp "$uri" .
         [[ "$sel" == move ]] && mv "$uri" .
