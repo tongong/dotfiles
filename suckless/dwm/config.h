@@ -100,6 +100,8 @@ static const char *notificationcmd[]  = { "st", "-e", "less", "/tmp/notification
 static const char *pausemusiccmd[]  = { "playerctl", "play-pause", NULL };
 static const char *notescmd[]  = { "st", "-e", "notes", NULL };
 static const char *newnotecmd[]  = { "dnote", NULL };
+static const char scratchpadname[] = "scratchpad";
+static const char *scratchpadcmd[] = { "st", "-t", scratchpadname, "-g", "120x34", "notes", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -122,7 +124,7 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_d,      spawn,          {.v = passmenucmd } },
 	{ MODKEY,                       XK_s,      spawn,          {.v = settingscmd } },
 	{ MODKEY,                       XK_m,      spawn,          {.v = pausemusiccmd } },
-	{ MODKEY,                       XK_g,      spawn,          {.v = notescmd } },
+	{ MODKEY,                       XK_g,      togglescratch,  {.v = scratchpadcmd } },
 	{ MODKEY|ShiftMask,             XK_g,      spawn,          {.v = newnotecmd } },
 	// Rotate focus through windows
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
