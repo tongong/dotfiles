@@ -2,6 +2,6 @@
 
 mkdir ~/screenshots
 
-imagepath=~/screenshots/$(date +%s).png
+imagepath=~/screenshots/$(date +%Y-%m-%d-%H-%M-%S).png
 maim -s $imagepath -u
 echo -n $imagepath | xsel -ib
