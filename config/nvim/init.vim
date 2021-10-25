@@ -19,7 +19,6 @@ set colorcolumn=80
 set signcolumn=yes
 set noshowmode " not needed because of lightline statusline
 set fillchars=eob:\ ,
-set conceallevel=2
 
 " use persistent history.
 " -> these are reset for /dev/shm to keep pass secure (see #autocommands)
@@ -46,9 +45,12 @@ set updatetime=100 " for vim-gitgutter
 "###  PLUGINS  ###############################################################
 call plug#begin('~/.vim/plugged')
 
+Plug 'ARM9/arm-syntax-vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'ap/vim-css-color'
 Plug 'axvr/zepl.vim'
+Plug 'embear/vim-localvimrc'
+Plug 'godlygeek/tabular'
 Plug 'itchyny/lightline.vim'
 Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -106,6 +108,7 @@ let g:repl_config = {
 let g:notes_dir = $NOTES_DIR
 source $HOME/.config/nvim/notes.vim
 
+source $HOME/.config/nvim/init-private.vim
 
 "###  REMAPS  ################################################################
 let mapleader = " "
@@ -147,6 +150,9 @@ nmap <Leader>ii <Plug>(GitGutterPreviewHunk)
 nmap <Leader>is <Plug>(GitGutterStageHunk)
 nmap <Leader>iu <Plug>(GitGutterUndoHunk)
 nmap <Leader>io <Plug>(GitGutterNextHunk)
+
+" fix gx (see https://github.com/vim/vim/issues/4738)
+nmap gx yiW:!xdg-open <cWORD><CR> <C-r>" & <CR><CR>
 
 " exit terminal mode
 tnoremap <Esc> <Esc><C-\><C-n>
@@ -202,6 +208,8 @@ augroup main
     autocmd BufEnter            *.remark    setlocal syntax=markdown
     " do not keep history for pass
     autocmd BufEnter            /dev/shm/*  setlocal undofile&
+    autocmd BufRead,BufNewFile  *.s,*.S     setlocal filetype=arm " = armv6/7
+    autocmd FileType arm                    setlocal commentstring=//\ %s
 
     " Don't screw up folds when inserting text that might affect them, until
     " leaving insert mode. Foldmethod is local to the window.
