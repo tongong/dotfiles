@@ -16,6 +16,11 @@ if [ -d "$HOME/.scripts" ] ; then
     PATH="$HOME/.scripts:$PATH"
 fi
 
+# set PATH so it includes npm bin if it exists
+if [ -d "$HOME/.npm-global/bin" ] ; then
+    PATH="$HOME/.npm-global/bin:$PATH"
+fi
+
 # environment variables
 export EDITOR=nvim
 export VISUAL=nvim
