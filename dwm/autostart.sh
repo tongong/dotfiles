@@ -35,4 +35,6 @@ else
     # xdotool still struggles with "`" character...
     # also remap caps lock to escape key
     setxkbmap de -option caps:escape
+    # disable touchscreen
+    xinput disable 9
 fi
