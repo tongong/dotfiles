@@ -24,7 +24,11 @@ else
 
     # autostart programs
     clipmenud &
-    # syncthing -no-browser &
+    # i am really unhappy with this solution as i need to start 3 programs for
+    # clipboard management but i didn't find something better
+    autocutsel -fork
+    autocutsel -selection PRIMARY -fork
+    syncthing -no-browser &
     timetracker | timetracker-save &
 
     # set keyboard layout (required for xdotool to work properly)
