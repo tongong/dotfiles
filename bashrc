@@ -1,6 +1,31 @@
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# colors in framebuffer
+# https://askubuntu.com/a/153493
+if [ "$TERM" = "linux" ]; then
+	# 8 normal colors
+	echo -en "\e]P0242424",  # black
+	echo -en "\e]P1d25252",  # red
+	echo -en "\e]P2a4c161",  # green
+	echo -en "\e]P3ffc56d",  # yellow
+	echo -en "\e]P46c99ba",  # blue
+	echo -en "\e]P5d096d9",  # magenta
+	echo -en "\e]P6bdd6ff",  # cyan
+	echo -en "\e]P7ffffff",  # white
+
+	# 8 bright colors
+	echo -en "\e]P8535353",  # black
+	echo -en "\e]P9f00c0c",  # red
+	echo -en "\e]PAc1df74",  # green
+	echo -en "\e]PBe1e48a",  # yellow
+	echo -en "\e]PC8ab6d9",  # blue
+	echo -en "\e]PDefb5f7",  # magenta
+	echo -en "\e]PEdbf4ff",  # cyan
+	echo -en "\e]PFffffff",  # white
+    clear # for background artifacting
+fi
+
 # add colors where possible
 alias ls='exa -l'
 alias grep='grep --color=auto'
