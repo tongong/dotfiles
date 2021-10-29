@@ -45,6 +45,6 @@ export DIARY_EDITOR=nvim
 export DIARY_READER=less
 
 # autostart X at login
-if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ]; then
+if [ -z "${DISPLAY}" ] && [ "${XDG_VTNR}" -eq 1 ] && [ -z "${TMUX}" ]; then
   exec startx
 fi
