@@ -14,11 +14,15 @@ set foldlevelstart=20
 
 " interface
 set number
-set relativenumber
-set colorcolumn=80
+call matchadd('ColorColumn', '\%80v.', 100) " color column
 set signcolumn=yes
 set noshowmode " not needed because of lightline statusline
 set fillchars=eob:\ ,
+set shortmess+=I
+" necessary to color the active line number
+" this breaks fold highlighting when you are in the fold line which is a
+" really annoying bug
+set cursorline
 
 " use persistent history.
 " -> these are reset for /dev/shm to keep pass secure (see #autocommands)
@@ -52,7 +56,6 @@ Plug 'axvr/zepl.vim'
 Plug 'embear/vim-localvimrc'
 Plug 'godlygeek/tabular'
 Plug 'itchyny/lightline.vim'
-Plug 'jeffkreeftmeijer/vim-dim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/goyo.vim'
@@ -64,8 +67,6 @@ call plug#end()
 
 
 "###  SETTINGS  ##############################################################
-" colors
-source $HOME/.config/nvim/patch-dim-colors.vim
 colorscheme dim
 
 " statusbar
