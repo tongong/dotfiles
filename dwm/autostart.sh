@@ -36,4 +36,7 @@ else
     setxkbmap de
     # disable touchscreen
     xinput disable 9
+
+    # remind me to take a break
+    while true; do sleep 1800; notify-send "  you have been sitting here for 30 minutes. maybe take a break?"; done &
 fi
