@@ -61,5 +61,5 @@ augroup AutoView
     " the loadview could change foldmethod. in this case foldmethod is
     " correctly reset using filetype rules
     " for the lightline part see https://github.com/itchyny/lightline.vim/issues/484
-    autocmd BufWinEnter ?* if MakeViewCheck() | silent! loadview | let &l:filetype = &l:filetype | call lightline#update() | endif
+    autocmd BufWinEnter ?* if MakeViewCheck() | silent! loadview | let &l:filetype = &l:filetype | endif
 augroup END

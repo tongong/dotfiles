@@ -16,7 +16,7 @@ set foldlevelstart=20
 set number
 call matchadd('ColorColumn', '\%80v.', 100) " color column
 set signcolumn=yes
-set noshowmode " not needed because of lightline statusline
+set noshowmode " not needed because of statusline
 set fillchars=eob:\ ,
 set shortmess+=I
 " necessary to color the active line number
@@ -55,7 +55,6 @@ Plug 'ap/vim-css-color'
 Plug 'axvr/zepl.vim'
 Plug 'embear/vim-localvimrc'
 Plug 'godlygeek/tabular'
-Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/goyo.vim'
@@ -69,8 +68,9 @@ call plug#end()
 "###  SETTINGS  ##############################################################
 colorscheme dim
 
-" statusbar
-let g:lightline = { 'colorscheme': 'dim', }
+" statusline
+" TODO add git diff to statusline
+lua require("statusline")
 
 " spell check toggle
 let g:myLangList = ["nospell", "de_de", "en_us"]
