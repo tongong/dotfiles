@@ -69,7 +69,6 @@ call plug#end()
 colorscheme dim
 
 " statusline
-" TODO add git diff to statusline
 lua require("statusline")
 
 " spell check toggle
