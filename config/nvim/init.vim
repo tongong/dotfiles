@@ -4,8 +4,7 @@ filetype plugin on
 set nocompatible
 
 " 4 is the best tab size; change my mind
-set tabstop=4 softtabstop=4
-set shiftwidth=4
+set tabstop=4 softtabstop=4 shiftwidth=4
 set expandtab
 set smartindent
 
@@ -55,11 +54,14 @@ Plug 'ap/vim-css-color'
 Plug 'axvr/zepl.vim'
 Plug 'embear/vim-localvimrc'
 Plug 'godlygeek/tabular'
+Plug 'guns/vim-clojure-static'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'mbbill/undotree'
+Plug 'tpope/vim-classpath'
 Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fireplace'
 Plug 'tpope/vim-fugitive'
 
 call plug#end()
@@ -206,10 +208,12 @@ augroup main
     " filetypes
     autocmd BufRead,BufNewFile  *.md        setlocal filetype=markdown
     autocmd BufEnter            *.remark    setlocal syntax=markdown
+    autocmd BufRead,BufNewFile  *.elm       setlocal tabstop=2 softtabstop=2 shiftwidth=2
     " do not keep history for pass
     autocmd BufEnter            /dev/shm/*  setlocal undofile&
     autocmd BufRead,BufNewFile  *.s,*.S     setlocal filetype=arm " = armv6/7
     autocmd FileType arm                    setlocal commentstring=//\ %s
+    autocmd BufRead,BufNewFile  *.clj       nnoremap <buffer> <leader>c :w! \| Require<CR>
 
     " Don't screw up folds when inserting text that might affect them, until
     " leaving insert mode. Foldmethod is local to the window.
