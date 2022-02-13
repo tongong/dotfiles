@@ -135,3 +135,7 @@ highligh SpellLocal ctermfg=0 ctermbg=1
 highlight clear Error
 highlight Error ctermfg=0 ctermbg=1
 highlight Todo ctermfg=0 ctermbg=3
+
+"###  AUTO-COMPLETION  ###################################################
+highlight Pmenu ctermfg=15 ctermbg=8
+highlight Pmenusel ctermfg=8 ctermbg=3

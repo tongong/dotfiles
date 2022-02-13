@@ -44,25 +44,37 @@ set hidden " keep buffers open in background
 set scrolloff=8
 set updatetime=100 " for vim-gitgutter
 
+set completeopt=menu,menuone,noselect,preview
+set pumheight=10
 
 "###  PLUGINS  ###############################################################
 call plug#begin('~/.vim/plugged')
 
-Plug 'ARM9/arm-syntax-vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'ap/vim-css-color'
 Plug 'axvr/zepl.vim'
 Plug 'embear/vim-localvimrc'
 Plug 'godlygeek/tabular'
-Plug 'guns/vim-clojure-static'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'mbbill/undotree'
-Plug 'tpope/vim-classpath'
 Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fireplace'
 Plug 'tpope/vim-fugitive'
+
+Plug 'ARM9/arm-syntax-vim'
+Plug 'ap/vim-css-color'
+Plug 'guns/vim-clojure-static'
+Plug 'tpope/vim-classpath'
+Plug 'tpope/vim-fireplace'
+
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-vsnip'
+Plug 'hrsh7th/vim-vsnip'
 
 call plug#end()
 
@@ -111,6 +123,8 @@ let g:notes_dir = $NOTES_DIR
 source $HOME/.config/nvim/notes.vim
 
 source $HOME/.config/nvim/init-private.vim
+
+lua require("config")
 
 "###  REMAPS  ################################################################
 let mapleader = " "
@@ -184,6 +198,12 @@ function! NextClosedFold(dir)
         call winrestview(view)
     endif
 endfunction
+
+" snippets for autocomplete
+imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 
 
 "###  AUTOCOMMANDS  ##########################################################
