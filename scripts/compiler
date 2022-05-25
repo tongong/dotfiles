@@ -21,5 +21,6 @@ case "$ext" in
 	h) sudo make install ;;
 	md) pandoc -s -o "$base".pdf "$file" ;;
     remark) "$dir"/remark/compile.sh "$file" ;;
-    tex) pdflatex "$file" ;;
+    tex) pdflatex --shell-escape "$file" ;;
+    bib) biber "$base" ;;
 esac
