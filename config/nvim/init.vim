@@ -66,6 +66,7 @@ Plug 'ap/vim-css-color'
 Plug 'guns/vim-clojure-static'
 Plug 'tpope/vim-classpath'
 Plug 'tpope/vim-fireplace'
+Plug 'https://git.sr.ht/~sircmpwn/hare.vim'
 
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
@@ -227,7 +228,7 @@ augroup main
 
     " filetypes
     autocmd BufRead,BufNewFile  *.md        setlocal filetype=markdown
-    autocmd BufEnter            *.remark    setlocal syntax=markdown
+    autocmd BufRead,BufNewFile  *.remark    setlocal filetype=markdown
     autocmd BufRead,BufNewFile  *.elm       setlocal tabstop=2 softtabstop=2 shiftwidth=2
     " do not keep history for pass
     autocmd BufEnter            /dev/shm/*  setlocal undofile&
