@@ -1,5 +1,80 @@
-#!/usr/bin/env sh
-# simple local web server
+#!/usr/bin/env node
+// local development server with live reload but without bloat
+// adapted from https://dev.to/adamcoster/create-a-live-reload-server-for-front-end-development-3gnp
+// if one argument is noreload disable live reload
+// if one argument is nobrowser do not open localhost
+// depends on entr for watching file changes
+// uses long polling to inform the client of changes
 
-(sleep 1; xdg-open "http://localhost:5500/") &
-python -m http.server 5500
+const http = require("http");
+const fs = require("fs");
+const path = require("path");
+const { spawn } = require("child_process");
+
+const HTTP_PORT = 5500;
+const CLIENT_INJECT_CODE = `\n<script>
+window.fetch("/poll-update").then(() => location.reload());
+</script>`
+
+const noreload = process.argv.includes("noreload");
+const nobrowser = process.argv.includes("nobrowser");
+
+let dir = process.cwd();
+if (fs.existsSync(path.join(dir, "dist"))
+        && fs.statSync(path.join(dir, "dist")).isDirectory())
+    dir = path.join(dir, "dist");
+
+// functions to call when a file updates
+let updateQueue = [];
+let updateFn = () => {
+    updateQueue.forEach(f => f());
+    updateQueue = [];
+}
+
+if (!noreload) {
+    // this is really not optimal but better than using some bloated npm
+    // package
+    let startExec = () => {
+        const p = spawn("sh", ["-c", "find | entr -pd echo"], { cwd: dir });
+        p.stdout.on("data", updateFn);
+        p.on("close", startExec);
+    };
+    startExec();
+}
+
+// serve a static file or index.html for directories
+function servePage(route, res) {
+    if (fs.existsSync(route) && fs.statSync(route).isDirectory()) {
+        route = path.join(route, "index.html");
+    }
+    if (fs.existsSync(route) && fs.statSync(route).isFile()) {
+        res.writeHead(200);
+        let file = fs.readFileSync(route);
+        if (!noreload && route.endsWith(".html"))
+            file = file.toString() + CLIENT_INJECT_CODE;
+        res.end(file);
+        return true;
+    }
+    return false;
+}
+
+const requestHandler = function (req, res) {
+    const method = req.method.toLowerCase();
+    if (method == "get") {
+        if (!noreload && req.url == "/poll-update") {
+            res.writeHead(200);
+            updateQueue.push(() => res.end());
+            return;
+        }
+        console.log(req.url);
+        const route = path.normalize(path.join(dir, req.url));
+        if (servePage(route,res)) return;
+    }
+    res.writeHead(404);
+    res.end("page not found.");
+}
+
+const server = http.createServer(requestHandler);
+server.listen(HTTP_PORT);
+
+if (!nobrowser) spawn("xdg-open", ["http://localhost:" + HTTP_PORT]);
