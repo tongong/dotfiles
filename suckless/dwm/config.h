@@ -30,7 +30,7 @@ static const char col12[]           = "#ffffff";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_white, col_gray, col_gray },
-	[SchemeSel]  = { col_white, col_green,  col_green  },
+	[SchemeSel]  = { col_gray, col_green,  col_green  },
 	[SchemeBar]  = { col_green, col_green,  col_green  }, // Dirty workaround lol
 	[SchemeCol1]  = { col1,      col_gray, col_gray },
 	[SchemeCol2]  = { col2,      col_gray, col_gray },

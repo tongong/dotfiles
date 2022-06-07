@@ -84,7 +84,7 @@ function status_line(active)
         .. fileformat()
         .. git_counts()
         .. active_highlight
-        .. " %l:%c "
+        .. " %l:%v "
 end
 
 status_line_highlights()
